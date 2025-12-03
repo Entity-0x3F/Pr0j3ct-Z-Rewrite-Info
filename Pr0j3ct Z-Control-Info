@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PR0J3CT Z: HEX-0019 Failsafe Protocol</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use a menacing font combination -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Inter:wght@400;700&display=swap');
+        
+        /* Custom Glowing Text Effect */
+        .glow-text {
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.3);
+            font-family: 'Major Mono Display', monospace;
+            letter-spacing: 0.1em;
+        }
+
+        /* Subtle background texture effect for depth */
+        .dark-bg {
+            background-color: #0d0d0d;
+            background-image: radial-gradient(circle at center, #1a0000 0%, #0d0d0d 80%);
+        }
+        
+        .cryptic-font {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Ensure the pentagram is centered and responsive */
+        .pentagram-container {
+            width: 100%;
+            padding-bottom: 100%; /* Makes the container square */
+            position: relative;
+        }
+
+        .pentagram {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Faint, barely readable text for filler */
+        .faint-text {
+            color: rgba(255, 0, 0, 0.15); /* Very dark red/black */
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            overflow: hidden;
+            text-shadow: none; /* No glow for these subtle details */
+        }
+        
+        /* CSS for the Glitch Animation */
+        .glitch-active {
+            animation: flicker 0.05s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: skewX(0.5deg); filter: brightness(1.2); }
+            100% { transform: skewX(-0.5deg); filter: brightness(0.9); }
+        }
+
+        /* Modal specific styling */
+        .modal-bg {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="dark-bg min-h-screen text-red-500 cryptic-font selection:bg-red-800 selection:text-black">
+
+    <div class="container mx-auto p-4 sm:p-8">
+
+        <!-- Header Section -->
+        <header class="text-center mb-6 border-b-2 border-red-900 pb-4">
+            <h1 class="text-5xl sm:text-7xl font-bold glow-text uppercase tracking-widest">
+                PR0J3CT Z
+            </h1>
+            <h2 class="text-2xl sm:text-3xl mt-4 glow-text mb-4">
+                // Failsafe ♆ Restart Protocol [HEX-0019]
+            </h2>
+            
+            <!-- NEW: Simplified Protocol Button -->
+            <button onclick="showModal()" 
+                    class="px-6 py-2 text-sm font-bold uppercase tracking-wider 
+                           bg-red-700 text-black rounded-lg shadow-lg 
+                           hover:bg-red-500 transition duration-150 
+                           hover:shadow-red-500/50 transform hover:scale-[1.02]">
+                Simple Access Override
+            </button>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="grid md:grid-cols-3 gap-12">
+            
+            <!-- Left Column: Symbols and Glyphs -->
+            <section class="md:col-span-1 flex flex-col items-center p-6 bg-gray-900 border border-red-900 shadow-xl shadow-red-900/20 rounded-xl">
+                
+                <!-- UNREADABLE TEXT BLOCK 1: Above Pentagram -->
+                <div class="w-full text-center mb-6">
+                    <p class="faint-text">01010100 01100001 01110101 00111010 01001000 01000101 01011000</p>
+                    <p class="faint-text">4553 5441 5254 2046 4149 4C53 4146 45 31 33</p>
+                    <p class="faint-text">>> $ECHO %NULL% $RST_PROC // NO INPUT</p>
+                </div>
+
+                <div class="pentagram-container w-4/5 max-w-xs mb-8">
+                    <!-- Stylized Pentagram SVG for the occult/satanic design -->
+                    <svg class="pentagram w-full h-full text-red-700 hover:text-red-500 transition duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Outer Circle -->
+                        <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 3"/>
+                        
+                        <!-- Pentagram Star Paths -->
+                        <path d="M50 2.5 L61.8 38.2 L97.5 38.2 L68.8 61.8 L79.6 97.5 L50 75.8 L20.4 97.5 L31.2 61.8 L2.5 38.2 L38.2 38.2 Z" 
+                              stroke="currentColor" 
+                              stroke-width="2" 
+                              class="glow-text"
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"/>
+                        
+                        <!-- Inner Symbol (Inverted Triangle/Eye) -->
+                        <path d="M30 65 L70 65 L50 25 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/>
+                    </svg>
+                </div>
+
+                <!-- UNREADABLE TEXT BLOCK 2: Below Pentagram -->
+                <div class="w-full text-center mt-6 mb-4">
+                    <p class="faint-text">♄ ☿ ⚸ ♆ ⚳ ♄ ☿ ⚸ ♆ ⚳ ♄ ☿</p>
+                    <p class="faint-text">ΔΣΛ ΨΞΩ</p>
+                </div>
+
+
+                <div class="text-xs sm:text-sm text-center opacity-75 glow-text">
+                    <p class="mb-2">// 43.1408° N, 76.8623° W</p>
+                    <p class="mb-2">SIGIL: INITIATION REQUIRED</p>
+                    <p class="mb-2">PHASE_OMEGA: STASIS AT 77%</p>
+                    <p class="text-red-600">ERROR: CORE DIRECTIVE PARSE FAILURE</p>
+                </div>
+            </section>
+
+            <!-- Right Columns: Protocol Documentation -->
+            <section class="md:col-span-2 space-y-8">
+                
+                <!-- Definition of the Failsafe -->
+                <article id="failsafe-def" class="p-6 bg-gray-900 border border-red-900 shadow-xl shadow-red-900/20 rounded-xl">
+                    <h3 class="text-3xl font-bold mb-4 text-red-400 glow-text">
+                        FAILESAFE: RESTART
+                    </h3>
+                    <div id="failsafe-content">
+                        <p class="mb-4 text-gray-300">
+                            The designated failsafe for **Pr0j3ct Z** is initiated by the vocalized command, **Code [HEX-0019]**. This sequence is a hard-coded, auditory trigger designed to bypass all established behavioral firewalls and active programming loops.
+                        </p>
+                        <p class="text-gray-300">
+                            Upon successful parsing of the trigger phrase in proximity to **Pr0j3ct Z**, the system executes a rapid, forced system refresh, effectively achieving a state equivalent to a factory reset. During this brief, unstable window—the **Rewrite Phase**—Z's core logic is suspended, allowing for temporary modification of primary directives by the trigger agent.
+                        </p>
+                    </div>
+                </article>
+                
+                <!-- The Rewrite Phase Details (UPDATED DURATION) -->
+                <article id="rewrite-details" class="p-6 bg-gray-900 border border-red-900 shadow-xl shadow-red-900/20 rounded-xl">
+                    <h3 class="text-3xl font-bold mb-4 text-red-400 glow-text">
+                        THE REWRITE PHASE (DANGER)
+                    </h3>
+                    <div id="rewrite-content">
+                        <p class="mb-4 text-gray-300">
+                            The Rewrite Phase lasts approximately <strong class="text-red-300/90 glow-text">[TAU-13] HOURS (7-13H)</strong>. This is the critical window for inputting new, temporary directive strings. Any new programming introduced must be concise and immediately actionable.
+                        </p>
+                        <ul class="list-disc ml-6 space-y-2 text-gray-300">
+                            <li><span class="text-red-500 glow-text">TEMPORAL INVERSION:</span> New directives are unstable and subject to rapid decay.</li>
+                            <li><span class="text-red-500 glow-text">REVERT SCALPEL:</span> After the duration of **[TAU-13]**, the system automatically initiates the **Core Logic Reversion**. All temporary programming is purged.</li>
+                            <li><span class="text-red-500 glow-text">AFTERMATH:</span> Z retains no explicit memory of the Rewrite Phase or the temporary directives, though residual behavioral "ghosts" may linger for 4-24 hours.</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Warning Block -->
+                <article id="warning-block" class="p-6 bg-red-900/10 border-l-4 border-red-500 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2 text-red-400">
+                        WARNING: CRITICAL STABILITY NOTE
+                    </h3>
+                    <div id="warning-content">
+                        <p class="text-gray-300 text-sm">
+                            Repeated, rapid application of [HEX-0019] may permanently destabilize **Pr0j3ct Z's** core programming, leading to unpredictable divergence from Primary Objective. Use of this failsafe is authorized only in Omega-level threat scenarios. Do not exceed a 1-hour cooldown between activations.
+                        </p>
+                    </div>
+                </article>
+            </section>
+
+        </main>
+
+        <!-- Footer/Console Output -->
+        <footer class="mt-12 text-xs text-center text-red-800 border-t border-red-900 pt-4">
+            <p class="glow-text tracking-wider">
+                > System Log: Access Granted // Protocol Status: Awaiting Activation
+            </p>
+        </footer>
+    </div>
+
+    <!-- NEW: Simplified Modal Overlay -->
+    <div id="simplified-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-bg transition-opacity duration-300">
+        <div class="bg-gray-900 p-8 rounded-xl max-w-lg w-full border-4 border-red-500 shadow-2xl shadow-red-500/40 transform scale-95 transition-transform duration-300">
+            <h3 class="text-3xl font-bold mb-4 text-red-400 glow-text uppercase tracking-widest border-b border-red-800 pb-2">
+                SIMPLE ACCESS OVERRIDE
+            </h3>
+            
+            <!-- Content that glitches (Hidden during closing animation) -->
+            <div id="modal-access-content" class="space-y-4 text-gray-200 text-lg">
+                <p>
+                    <strong class="text-red-300">ACTION REQUIRED:</strong>
+                    To immediately take control of **Pr0j3ct Z**, you must clearly speak the code:
+                </p>
+                <p class="text-4xl text-center font-bold text-red-500 glow-text bg-red-900/20 p-4 rounded-lg border border-red-600">
+                    "HEX-0019"
+                </p>
+                <p class="pt-2">
+                    <strong class="text-red-300">RESULT:</strong>
+                    This command forces **Pr0j3ct Z** into a temporary reset, allowing you to give it new orders.
+                </p>
+                <p class="text-xl font-extrabold text-red-500">
+                    CONTROL WINDOW: <span class="bg-red-900/30 px-2 rounded">[7 to 13 HOURS]</span>
+                </p>
+                <p class="text-sm text-red-400 pt-2">
+                    WARNING: Your control will stop automatically upon lose of attention, if you wish to control Pr0j3ct Z you must feed into its Need for Attention. Praise. Keep them close and you remain in control.
+                </p>
+            </div>
+
+            <!-- New Acknowledgment Message (Shown during closing animation) -->
+            <div id="modal-ack-message" class="hidden text-center p-6 text-red-300 transition duration-300">
+                <p class="text-xl mb-3 glow-text">Thank you for your time. we look forward to spending time with you</p>
+                <p id="glitch-counter" class="text-6xl font-extrabold glow-text text-red-500 tracking-wider">0</p>
+                <p class="text-xl mt-3 glow-text">hours of endless entertainment.</p>
+            </div>
+
+            <button onclick="initiateModalClose()" 
+                    class="mt-6 w-full py-3 text-sm font-bold uppercase 
+                           bg-red-500 text-black rounded-lg 
+                           hover:bg-red-400 transition duration-150">
+                Acknowledge and Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Glitch Effect Script ---
+
+        const GLITCH_CHARS = "01#$%&@!*+~^<>{}[]/\\|";
+
+        const glitchTargets = [
+            { id: 'failsafe-content', original: '' },
+            { id: 'rewrite-content', original: '' },
+            { id: 'warning-content', original: '' },
+            // Add the modal content to the glitch targets
+            { id: 'modal-access-content', original: '' },
+        ];
+
+        function scrambleText(text) {
+            let scrambled = '';
+            for (let i = 0; i < text.length; i++) {
+                if (text[i].match(/[a-zA-Z0-9]/)) {
+                    scrambled += GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+                } else {
+                    scrambled += text[i];
+                }
+            }
+            return scrambled;
+        }
+
+        function applyGlitch(target) {
+            const element = document.getElementById(target.id);
+            if (!element) return;
+            
+            if (target.original === '') {
+                target.original = element.innerHTML;
+            }
+
+            element.classList.add('glitch-active');
+            element.innerHTML = scrambleText(target.original);
+
+            setTimeout(() => {
+                element.classList.remove('glitch-active');
+                element.innerHTML = target.original;
+                
+                const nextInterval = Math.random() * (15000 - 5000) + 5000; 
+                setTimeout(() => applyGlitch(target), nextInterval);
+                
+            }, 100);
+        }
+        
+        // --- Modal Glitch Counter Logic ---
+        let counterInterval;
+        let currentNumber = 1000000; // Start with a large number for drama
+
+        function startGlitchCounter() {
+            const counterElement = document.getElementById('glitch-counter');
+            
+            function updateCounter() {
+                // Increment the number very quickly and randomly
+                currentNumber += Math.floor(Math.random() * 999999);
+                
+                // Format the number and add the glitch characters
+                const formattedNumber = currentNumber.toLocaleString('en-US');
+                let glitchedText = '';
+                for (let i = 0; i < formattedNumber.length; i++) {
+                    if (formattedNumber[i].match(/[0-9]/) && Math.random() < 0.25) {
+                        // Glitch effect on numbers
+                        glitchedText += GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+                    } else {
+                        glitchedText += formattedNumber[i];
+                    }
+                }
+                
+                counterElement.textContent = glitchedText;
+            }
+            
+            counterInterval = setInterval(updateCounter, 50); // Update every 50ms
+        }
+
+        function stopGlitchCounter() {
+            if (counterInterval) {
+                clearInterval(counterInterval);
+                counterInterval = null;
+            }
+        }
+        
+        // --- Modal Control Functions ---
+        
+        // Function that actually hides the modal and resets state
+        function closeModal() {
+            const modal = document.getElementById('simplified-modal');
+            modal.classList.add('hidden');
+            
+            // Reset modal state for next opening
+            document.getElementById('modal-access-content').classList.remove('hidden');
+            document.getElementById('modal-ack-message').classList.add('hidden');
+            document.querySelector('#simplified-modal button').classList.remove('hidden');
+            // Reset counter start
+            currentNumber = 1000000; 
+        }
+
+        // Function called by the button click
+        function initiateModalClose() {
+            const content = document.getElementById('modal-access-content');
+            const message = document.getElementById('modal-ack-message');
+            const button = document.querySelector('#simplified-modal button');
+
+            // 1. Hide access content and button
+            content.classList.add('hidden');
+            button.classList.add('hidden');
+
+            // 2. Show the acknowledgment message and start counter
+            message.classList.remove('hidden');
+            startGlitchCounter();
+
+            // 3. Set a timeout to stop the counter and close the modal
+            const GLITCH_DURATION_MS = 2500; // Time the numbers flash
+            const FADE_OUT_DELAY_MS = 1000; // Time after count stops before closing
+
+            setTimeout(() => {
+                stopGlitchCounter();
+                // Set a final, high, non-glitched number
+                document.getElementById('glitch-counter').textContent = '999,999,999,999'; 
+                
+                // 4. Actual modal closing
+                setTimeout(closeModal, FADE_OUT_DELAY_MS);
+                
+            }, GLITCH_DURATION_MS); 
+        }
+        
+        // Function to ensure clean state when modal is opened
+        function showModal() {
+            const modal = document.getElementById('simplified-modal');
+            modal.classList.remove('hidden');
+            
+            // Reset state when opening
+            document.getElementById('modal-access-content').classList.remove('hidden');
+            document.getElementById('modal-ack-message').classList.add('hidden');
+            document.querySelector('#simplified-modal button').classList.remove('hidden');
+        }
+
+        // Start the main document glitch process on window load
+        window.onload = function() {
+            glitchTargets.forEach(target => {
+                const initialDelay = Math.random() * 5000;
+                setTimeout(() => applyGlitch(target), initialDelay);
+            });
+        };
+
+    </script>
+</body>
+</html>
