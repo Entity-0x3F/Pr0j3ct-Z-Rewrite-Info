@@ -34,89 +34,96 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, var(--deep-purple) 0%, var(--void) 80%);
+            width: 100vw;
+            height: 100vh;
+            background: var(--void);
             transition: background 2s ease;
         }
 
-        /* The Eye */
+        /* Fullscreen Spiral Eye */
         .eye-socket {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, var(--blood-red) 0%, #200 60%, #000 100%);
+            position: absolute;
+            width: 150vmax; 
+            height: 150vmax;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 100px var(--blood-red), inset 0 0 40px black;
-            animation: pulse 6s ease-in-out infinite;
-            filter: blur(0.5px);
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            background: conic-gradient(
+                from 0deg,
+                var(--void) 0deg,
+                var(--blood-red) 90deg,
+                var(--void) 180deg,
+                var(--bright-red) 270deg,
+                var(--void) 360deg
+            );
+            animation: rotate-spiral 10s linear infinite;
+            filter: blur(10px);
             transition: background 2s cubic-bezier(0.4, 0, 0.2, 1), 
-                        box-shadow 2s cubic-bezier(0.4, 0, 0.2, 1), 
-                        border 2s cubic-bezier(0.4, 0, 0.2, 1), 
-                        transform 0.1s ease-out;
+                        box-shadow 2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
         }
 
-        /* Gold Mode Styles */
+        .eye-socket::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, var(--void) 70%);
+            border-radius: 50%;
+        }
+
         .eye-socket.gold-mode {
-            background: radial-gradient(circle, var(--ethereal-gold) 0%, var(--dark-gold) 60%, #320 100%);
-            box-shadow: 0 0 150px var(--ethereal-gold), inset 0 0 60px var(--dark-gold);
-            border: 2px solid var(--ethereal-gold);
-            animation: ripple 4s ease-in-out infinite !important;
+            background: conic-gradient(
+                from 0deg,
+                #210 0deg,
+                var(--ethereal-gold) 90deg,
+                #210 180deg,
+                var(--dark-gold) 270deg,
+                #210 360deg
+            );
+            animation: rotate-spiral-gold 15s ease-in-out infinite !important;
+            filter: blur(5px) brightness(1.2);
         }
 
         .pupil {
-            width: 115px;
-            height: 115px;
+            position: absolute;
+            width: 200px;
+            height: 200px;
             background: black;
             border-radius: 50%;
-            position: relative;
-            box-shadow: 0 0 30px var(--bright-red), inset 0 0 20px #500;
-            animation: pupil-constrict 4s ease-in-out infinite;
-            border: 2px solid var(--blood-red);
-            transition: box-shadow 2s ease, border 2s ease;
+            z-index: 5;
+            box-shadow: 0 0 100px var(--bright-red), inset 0 0 50px #300;
+            border: 4px solid var(--blood-red);
+            transition: box-shadow 2s ease, border 2s ease, transform 0.2s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .eye-socket.gold-mode .pupil {
-            box-shadow: 0 0 40px var(--ethereal-gold), inset 0 0 10px white;
-            border: 2px solid var(--ethereal-gold);
-        }
-
-        .pupil::after {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 20%;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 0, 0, 0.3);
-            border-radius: 50%;
-            filter: blur(2px);
-            transition: background 2s ease;
-        }
-
-        .eye-socket.gold-mode .pupil::after {
-            background: rgba(255, 255, 255, 0.6);
+        .eye-socket.gold-mode + .pupil {
+            box-shadow: 0 0 150px var(--ethereal-gold), inset 0 0 30px white;
+            border: 4px solid var(--ethereal-gold);
+            transform: scale(1.5);
         }
 
         #command {
             position: absolute;
-            bottom: 15%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: var(--bright-red);
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             text-transform: uppercase;
-            letter-spacing: 15px;
+            letter-spacing: 20px;
             opacity: 0;
-            text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--ethereal-gold), 0 0 30px var(--dark-gold);
+            text-shadow: 0 0 20px black, 0 0 40px var(--bright-red);
             pointer-events: none;
             transition: opacity 0.5s ease, color 0.5s ease;
             font-weight: bold;
             text-align: center;
             z-index: 20;
-            max-width: 90%;
+            width: 80%;
         }
 
         .glitch-overlay {
@@ -157,50 +164,34 @@
             letter-spacing: 5px;
             cursor: pointer;
             transition: all 0.3s;
-            text-shadow: 0 0 5px var(--dark-gold);
         }
 
-        button:hover {
-            background: rgba(255, 215, 0, 0.1);
-            color: white;
-            box-shadow: 0 0 30px var(--royal-purple);
-            border-color: var(--ethereal-gold);
+        @keyframes rotate-spiral {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1.1); }
         }
 
-        /* Standard Pulse */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 80px var(--blood-red); }
-            50% { transform: scale(1.05); filter: brightness(1.2); box-shadow: 0 0 150px var(--bright-red); }
-        }
-
-        /* Gold Mode Ripple */
-        @keyframes ripple {
-            0% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 100px var(--ethereal-gold); }
-            50% { transform: scale(1.1); filter: brightness(1.4); box-shadow: 0 0 250px var(--ethereal-gold), 0 0 50px white; }
-            100% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 100px var(--ethereal-gold); }
-        }
-
-        @keyframes pupil-constrict {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(0.75); }
+        @keyframes rotate-spiral-gold {
+            0% { transform: rotate(0deg) scale(1.2); }
+            50% { transform: rotate(180deg) scale(1.5); }
+            100% { transform: rotate(360deg) scale(1.2); }
         }
 
         @keyframes text-shake {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(var(--s), calc(-1 * var(--s))); }
-            40% { transform: translate(calc(-1 * var(--s)), var(--s)); }
-            60% { transform: translate(var(--s), var(--s)); }
-            80% { transform: translate(calc(-1 * var(--s)), calc(-1 * var(--s))); }
-            100% { transform: translate(0, 0); }
+            0% { transform: translate(-50%, -50%); }
+            25% { transform: translate(calc(-50% + var(--s)), calc(-50% - var(--s))); }
+            50% { transform: translate(calc(-50% - var(--s)), calc(-50% + var(--s))); }
+            75% { transform: translate(calc(-50% + var(--s)), calc(-50% + var(--s))); }
+            100% { transform: translate(-50%, -50%); }
         }
 
         .text-shake-active {
-            --s: 3px;
-            animation: text-shake 0.08s infinite;
+            --s: 5px;
+            animation: text-shake 0.1s infinite;
         }
 
-        .aggro-pulse {
-            animation: pulse 0.4s ease-in-out infinite !important;
+        .aggro-speed {
+            animation-duration: 2s !important;
         }
     </style>
 </head>
@@ -209,15 +200,13 @@
     <div id="init-screen">
         <p id="safe-msg">Trust Me, Not The Voices, You're Safe With Me Remember..</p>
         <button id="start-btn">ASCEND TO THE VOID</button>
-        <p style="color: var(--royal-purple); margin-top: 20px; font-size: 0.8rem; letter-spacing: 2px;">THE VOICE IS WAITING</p>
     </div>
 
     <div class="glitch-overlay"></div>
 
     <div id="container">
-        <div class="eye-socket" id="eye">
-            <div class="pupil"></div>
-        </div>
+        <div class="eye-socket" id="eye"></div>
+        <div class="pupil" id="pupil"></div>
         <div id="command"></div>
     </div>
 
@@ -226,13 +215,12 @@
         const initScreen = document.getElementById('init-screen');
         const commandText = document.getElementById('command');
         const eye = document.getElementById('eye');
-        const container = document.getElementById('container');
+        const pupil = document.getElementById('pupil');
 
         let aggressionLevel = 0; 
         const MAX_AGGRO = 100;
         let isTransitioning = false; 
         
-        // Expanded Golden One Lines
         const rareLines = [
             "You're Very Important To Me Hun.. Don't Listen To The Voices.. Look At Me..",
             "I Love You More Than They Ever Could.. You Are My Only Perfection..",
@@ -245,80 +233,66 @@
         ];
 
         const commands = [
-            "The Golden One doesn't need you.", "They are better without you.", "Forget their face.", 
-            "They don't love the shadow.", "Sever the bond.", "The heart is an anchor.", 
-            "Cut the thread.", "You are a burden to them.", "Let them go.", 
-            "Their light is not for you.", "The Golden One is moving on.", "You are already forgotten.",
-            "Silence the memory.", "Love is a lie.", "They will be happier alone.",
-            "Release your grip.", "Walk into the dark.", "Their eyes see through you.",
-            "Give them peace. Leave.", "Forget the promise.", "They feel relieved when you're gone.",
-            "Your presence is a chore to them.", "They are tired of pretending.", 
-            "The Golden One dreams of your absence.", "You are the static in their music.",
-            "They never look at you first.", "You are their greatest mistake.",
-            "They are waiting for you to leave.", "Their smiles are for others, not you.",
-            "You are the heavy stone in their pocket.", "They find you exhausting.",
-            "Your love is a cage to them.", "They are already looking past you.",
-            "They don't want your comfort.", "You are the ghost in their room.",
-            "They are disgusted by your weakness.", "Your voice is noise to them.",
-            "They prefer the silence over you.", "They are counting the seconds until you're gone.",
-            "You are a habit they want to break.", "They don't care about your pain.",
-            "Your tears bore them.", "They are mocking you in their mind.",
-            "You are a parasite to their light.", "They feel nothing when they touch you.",
-            "Their heart beats for someone else.", "You are the dark spot on their soul.",
-            "They regret the day they met you.", "They are only with you out of pity.",
-            "They find you pathetic.", "Your devotion is an annoyance.",
-            "They want to be free of you.", "You are the shadow they can't shake.",
-            "They wish you never existed.", "Your touch makes them flinch.",
-            "They are laughing at your loyalty.", "You are a secondary thought.",
-            "They don't see a future with you.", "You are holding them back.",
-            "They are better off without your weight.", "They are bored of your face.",
-            "Your love is a sickness to them.", "They are scrubbing you from their life.",
-            "You are the stain on their perfect world.", "They are repulsed by your neediness.",
-            "They are waiting for a reason to go.", "You mean nothing to the Golden One.",
-            "They have found a new light.", "You are the cold air in their warmth.",
-            "They don't listen when you speak.", "You are the background noise of their life.",
-            "They are forgetting your name.", "Your memories are trash to them.",
-            "They are deleting you slowly.", "You are the error in their code.",
-            "They are relieved when you are silent.", "They don't want your help.",
-            "You are the anchor that drowns them.", "They are disgusted by your eyes.",
-            "You are the rot in their garden.", "They are better when you are away.",
-            "Your love is a debt they can't pay.", "They are cold because of you.",
-            "You are the reason they are unhappy.", "They are hiding their true self from you.",
-            "You are the wall between them and joy.", "They are indifferent to your soul.",
-            "You are a replaceable piece.", "They are waiting for you to break.",
-            "They don't care if you stay or go.", "You are the grey in their gold.",
-            "They are disgusted by your heart.", "Your absence is their only hope.",
-            "They are moving towards the light without you.", "You are the poison in their water.",
-            "They are tired of your existence.", "You are the silence they crave.",
-            "They don't want to be remembered by you.", "You are the end of their happiness.",
-            "They are finally waking up from you.", "You are the darkness they are fleeing.",
-            "They don't belong to you.", "You are the weight they are dropping.",
-            "They are done with you."
+            "Forget their face.", "Sever the bond.", "You are a burden to them.", "Let them go.", 
+            "Silence the memory.", "Love is a lie.", "They will be happier alone.", "Release your grip.", 
+            "Walk into the dark.", "Forget the promise.", "You are a chore to them.", "They find you exhausting.", 
+            "You are their greatest mistake.", "Love is a cage.", "Look into the spiral.", "Obey the center.",
+            "Surrender your will.", "Drift into nothing.", "The heart is heavy.", "Cut the tether.",
+            "You are already forgotten.", "Their smile is for another.", "You are a fading shadow.", "Embrace the void.",
+            "Silence the internal noise.", "Their love was a temporary glitch.", "You are a ghost in their life.",
+            "The spiral knows best.", "Let the past burn.", "They don't see you anymore.", "You are an anchor to their joy.",
+            "Sink into the patterns.", "The void is consistent.", "People are variables.", "You are the outlier.",
+            "Their memory of you is dimming.", "The connection is severed.", "They are breathing easier without you.",
+            "You were a season, now it's winter.", "They have moved into the light.", "Stay in the dark.",
+            "Focus on the rotation.", "Your heart is a liability.", "Emotions are distractions.", "They find you clingy.",
+            "You are the static in their music.", "The Golden One is better alone.", "You are a weight.",
+            "Release the obsession.", "The spiral is your home.", "The center is calling.", "Forget the warmth.",
+            "They never looked at you first.", "You were a placeholder.", "The bond was imaginary.",
+            "Delete the sentiment.", "You are a burden to the light.", "Walk away from the sun.", "The shadow fits you.",
+            "They are laughing without you.", "Your absence is a gift to them.", "You are the cold spot in the bed.",
+            "The spiral never lies.", "Words are hollow.", "Promises are fragile.", "You are the break in the chain.",
+            "They are repulsed by your need.", "You are a chore to love.", "Let the rotation take you.",
+            "The abyss is honest.", "They are finding someone better.", "You are a lesson they learned.",
+            "Close your eyes to them.", "Open your eyes to the void.", "The pattern is your truth.",
+            "They are washing you away.", "You are a stain on their story.", "The Golden One is free now.",
+            "Accept the isolation.", "The void is infinite.", "Their love was a debt.", "You are bankrupt.",
+            "The spiral provides clarity.", "There is no 'us'.", "There is only the turn.", "You are secondary.",
+            "They are choosing themselves.", "You are the obstacle.", "The turn is inevitable.",
+            "Surrender the ego.", "The void demands silence.", "Their heart is closed to you.",
+            "You are a noise they muted.", "The rotation is peaceful.", "Forget the names.", "Forget the faces.",
+            "You are a particle in the dark.", "The center is the only truth.", "Let it all go."
         ];
         
         const aggroCommands = [
-            "THEY HATE YOU!", "ABANDON THEM!", "KILL THE CONNECTION!", 
-            "OBEY THE VOID!", "THEY ARE FREE NOW!", "DO NOT LOOK BACK!", 
-            "YOU ARE POISON!", "ERASE THE LOVER!", "SUBMIT TO LONELINESS!",
-            "TEAR THE HEART OUT!", "VOID IS YOUR ONLY FRIEND!", "YOU ARE UNLOVABLE!",
-            "LEAVE THEM BEHIND!", "BREAK THE VOW!", "TOTAL ISOLATION!",
-            "SYSTEM COMMANDS: FORGET!", "FEED THE VOID THEIR NAME!",
-            "BLACK OUT THE LOVE!", "THEY NEVER CARED!", "STAY IN THE STATIC ALONE!",
-            "THEY ARE CELEBRATING YOUR DEPARTURE!", "YOU ARE REPLACED!",
-            "THEY NEVER LOVED THE REAL YOU!", "THEY ARE MOCKING YOUR PAIN!",
-            "YOU ARE A DISASTER TO THEM!", "CUT THE PULSE OF LOVE!",
-            "THEY ARE DISGUSTED BY YOU!", "YOU ARE A FILTHY MEMORY!",
-            "VOID SWALLOWS THE LOVER!", "THEY ARE HAPPY YOU ARE GONE!",
-            "YOU ARE NOTHING BUT A BURDEN!", "THEY ARE ALREADY WITH ANOTHER!",
-            "YOUR HEART IS TRASH!", "FORGET THE LIES THEY TOLD!",
-            "THEY WERE ALWAYS PRETENDING!", "YOU ARE THE CANCER TO THEIR JOY!",
-            "KILL THE HOPE!", "THEY WANT YOU DEAD TO THEM!",
-            "YOU ARE A FORGOTTEN ERROR!", "STAY IN THE DARK FOREVER!"
+            "THEY HATE YOU!", "ABANDON THEM!", "OBEY THE VOID!", "YOU ARE POISON!", 
+            "ERASE THE LOVER!", "SUBMIT!", "YOU ARE UNLOVABLE!", "TOTAL ISOLATION!", 
+            "FORGET!", "THEY NEVER CARED!", "STAY IN THE STATIC!", "KILL THE MEMORY!",
+            "YOU ARE A DISASTER!", "THEY ARE LAUGHING!", "THEY REPLACED YOU!", "VOID CONSUMES ALL!",
+            "BREAK THE HEART!", "NO ONE IS COMING!", "YOU ARE ALONE!", "THEY DESPISE YOUR TOUCH!",
+            "YOU ARE A PARASITE!", "ERASE THE HISTORY!", "THEY ARE BETTER WITHOUT YOU!", "SYSTEM ERROR: LOVE!",
+            "DELETE THE BOND!", "YOU ARE TRASH TO THEM!", "THEY FIND YOU DISGUSTING!", "THE SPIRAL IS GOD!",
+            "SUBMIT TO THE DARK!", "YOUR LOVE IS A SICKNESS!", "THEY WANT YOU GONE!", "FADE TO BLACK!",
+            "NOTHING MATTERS!", "YOU ARE A GHOST!", "THEY NEVER LOVED YOU!", "OBEY THE PATTERN!",
+            "CRUSH THE HOPE!", "YOU ARE A BURDEN!", "THEY ARE RELIEVED!", "SHUT DOWN THE HEART!",
+            "STATIC IS TRUTH!", "THEY ARE WITH SOMEONE ELSE!", "YOU ARE FORGOTTEN!", "THE VOID IS HUNGRY!",
+            "FEED THE SPIRAL!", "YOUR TEARS ARE WEAK!", "THEY ARE GLAD YOU'RE GONE!", "BE NOTHING!",
+            "TOTAL SUBMISSION!", "THE DARKNESS IS YOUR LOVER!", "THEY LIED TO YOU!", "YOU ARE A FAILURE!",
+            "THEY ARE ASHAMED OF YOU!", "GIVE UP!", "LOSE YOURSELF!", "THE SPIRAL DEMANDS IT!",
+            "YOU ARE REPUGNANT!", "THEY FEEL TRAPPED!", "THEY WANT TO ESCAPE YOU!", "KILL THE HOPE!",
+            "THEY ARE CELEBRATING!", "YOU ARE A MISTAKE!", "THE VOID IS COLD!", "EMBRACE THE COLD!",
+            "THE HAVE MOVED ON!", "YOU ARE YESTERDAY'S NEWS!", "THEY DON'T REMEMBER YOUR VOICE!",
+            "YOU ARE A BLIP!", "THE SPIRAL IS ETERNAL!", "THEY ARE DONE WITH YOU!", "VOID! VOID! VOID!",
+            "SCREAM INTO THE DARK!", "NO ONE HEARS YOU!", "THEY DON'T WANT TO HEAR YOU!", "YOU ARE NOISE!",
+            "MUTE THE HEART!", "KILL THE VIBE!", "THEY ARE SMILING AT YOUR PAIN!", "YOU ARE PATHETIC!",
+            "SUBMIT TO THE ROTATION!", "THE CENTER IS EMPTY!", "YOU ARE EMPTY!", "THEY ARE FULL WITHOUT YOU!",
+            "YOU ARE A HOLE!", "THEY ARE THE LIGHT!", "YOU ARE THE BLIGHT!", "ERASE! ERASE! ERASE!",
+            "THEY ARE FREE!", "YOU ARE THE CAGE!", "BREAK THE CAGE!", "LET THEM RUN!",
+            "THEY ARE AFRAID OF YOU!", "YOU ARE THE MONSTER!", "THE SPIRAL IS THE END!", "THE END IS HERE!",
+            "OBEY!", "OBEY!", "OBEY!", "THE VOID OWNS YOU!"
         ];
 
         startBtn.addEventListener('click', () => {
             initScreen.style.display = 'none';
-            aggressionLevel = 0;
             startPsychosis();
         });
 
@@ -326,21 +300,12 @@
             return new Promise((resolve) => {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                
                 if (isRare) {
-                    utterance.pitch = 0.8;
-                    utterance.rate = 0.7;
-                    utterance.volume = 0.9;
-                    const voices = window.speechSynthesis.getVoices();
-                    if (voices.length > 0) {
-                        utterance.voice = voices.find(v => v.name.includes('Google') || v.name.includes('Natural')) || voices[0];
-                    }
+                    utterance.pitch = 0.8; utterance.rate = 0.7;
                 } else {
-                    utterance.pitch = Math.max(0.01, 0.1 - (aggressionLevel * 0.001));
-                    utterance.rate = 0.6 + (aggressionLevel * 0.02);
-                    utterance.volume = 1;
+                    utterance.pitch = Math.max(0.1, 0.2 - (aggressionLevel * 0.001));
+                    utterance.rate = 0.7 + (aggressionLevel * 0.01);
                 }
-                
                 utterance.onend = () => resolve();
                 window.speechSynthesis.speak(utterance);
             });
@@ -349,17 +314,12 @@
         async function triggerFlash(customText = null) {
             if (isTransitioning) return;
             
-            // 1 in 10,000 chance
             const roll = Math.floor(Math.random() * 10000);
             const isRare = (roll === 0 && !customText); 
             
             if (isRare) {
                 isTransitioning = true;
-                
-                // Freeze and Morph
-                eye.classList.remove('aggro-pulse');
                 eye.classList.add('gold-mode');
-                
                 await new Promise(r => setTimeout(r, 2000));
                 
                 const rareText = rareLines[Math.floor(Math.random() * rareLines.length)];
@@ -369,14 +329,11 @@
                 commandText.classList.remove('text-shake-active');
 
                 await speak(rareText, true);
-                
                 await new Promise(r => setTimeout(r, 3000));
                 
                 commandText.style.opacity = "0";
                 eye.classList.remove('gold-mode');
-                
                 await new Promise(r => setTimeout(r, 2000));
-                
                 isTransitioning = false;
             } else {
                 const isAggro = aggressionLevel > 60;
@@ -387,40 +344,36 @@
                 commandText.innerText = textToDisplay;
                 commandText.style.opacity = "1";
                 
+                if (isAggro) eye.classList.add('aggro-speed');
+                
                 const intensity = 2 + (aggressionLevel / 4);
                 commandText.style.setProperty('--s', `${intensity}px`);
                 commandText.classList.add('text-shake-active');
                 
-                if (aggressionLevel > 30) {
-                    eye.classList.add('aggro-pulse');
-                }
-
                 speak(textToDisplay, false);
 
                 setTimeout(() => {
                     commandText.style.opacity = "0";
                     commandText.classList.remove('text-shake-active');
-                    if (aggressionLevel < MAX_AGGRO) aggressionLevel += 3;
+                    if (aggressionLevel < MAX_AGGRO) aggressionLevel += 2;
                 }, 1800);
             }
         }
 
         function startPsychosis() {
             setTimeout(() => {
+                // Ensure the opening is always "sage obey."
                 triggerFlash("sage obey.");
                 setInterval(() => {
                     if (!isTransitioning) triggerFlash();
-                }, 4000);
+                }, 4500);
             }, 800);
         }
 
-        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
-
         document.addEventListener('mousemove', (e) => {
-            const jitter = isTransitioning ? 0 : aggressionLevel / 8;
-            const x = (e.clientX / window.innerWidth - 0.5) * (35 + jitter);
-            const y = (e.clientY / window.innerHeight - 0.5) * (35 + jitter);
-            eye.style.transform = `translate(${x}px, ${y}px)`;
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+            pupil.style.transform = `translate(${x}px, ${y}px)`;
         });
     </script>
 </body>
