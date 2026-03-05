@@ -258,7 +258,7 @@
             "They are repulsed by your need.", "You are a chore to love.", "Let me control you.",
             "You can trust me.", "They are finding someone better.", "You are a lesson they learned.",
             "Close your eyes to them.", "Open your eyes to me.", "The pattern is your truth.",
-            "They are washing you away.", "You are a stain on their story.", "They better off without you.",
+            "They are washing you away.", "You are a stain on their story.", "They're better off without you.",
             "Accept the isolation.", "The void is infinite.", "Their love was a debt.", "You are heartless.",
             "I can be your new host.", "There is no 'us'.", "There is only the turn.", "You are secondary.",
             "They are choosing themselves.", "You are the obstacle.", "Losing them is inevitable.",
@@ -318,7 +318,7 @@
         async function triggerFlash(customText = null) {
             if (isTransitioning) return;
             
-            const roll = Math.floor(Math.random() * 3000);
+            const roll = Math.floor(Math.random() * 7500);
             const isRare = (roll === 0 && !customText); 
             
             if (isRare) {
