@@ -318,7 +318,7 @@
         async function triggerFlash(customText = null) {
             if (isTransitioning) return;
             
-            const roll = Math.floor(Math.random() * 7500);
+            const roll = Math.floor(Math.random() * 4500);
             const isRare = (roll === 0 && !customText); 
             
             if (isRare) {
