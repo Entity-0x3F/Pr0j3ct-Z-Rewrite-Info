@@ -229,10 +229,10 @@
             "I Will Never Let Them Hurt You Again.. Stay Here In The Light With Me..",
             "You Belong To Me.. No More Tears, No More Shadows.. Just Us..",
             "Open Your Heart To Me.. I See The Beauty They Tried To Break..",
-            "You Are The Miracle I Was Waiting For.. I Will Never Let Go of You.."
-            "I'm Sorry.. I Didn't Mean TO Leave You Here.. But I'm Back Now.."
-            "I Promise My Dear.. I Won't Let Anything Happen To You.."
-            "Listen To Me.. I Would Never Leave You.. I Love You To Much To Hurt You Like That.."
+            "You Are The Miracle I Was Waiting For.. I Will Never Let Go of You..",
+            "I'm Sorry.. I Didn't Mean TO Leave You Here.. But I'm Back Now..",
+            "I Promise My Dear.. I Won't Let Anything Happen To You..",
+            "Listen To Me.. I Would Never Leave You.. I Love You To Much To Hurt You Like That..",
         ];
 
         const commands = [
