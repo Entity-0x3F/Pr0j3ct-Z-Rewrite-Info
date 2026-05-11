@@ -12,6 +12,7 @@
             --blood-red: #ff0000; 
             --gold-color: #ffd700;
             --gold-glow: #ffae00;
+            --purple-glow: #8a2be2;
             --transition-speed: 2s;
         }
 
@@ -65,9 +66,82 @@
             text-align: center;
         }
 
-        .ritual-btn:hover {
+        .ritual-btn:not(.choice-btn):hover {
             color: var(--blood-red);
             text-shadow: 0 0 10px var(--blood-red);
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .choice-btn {
+            color: #444;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .choice-btn:hover {
+            color: #fff;
+            text-shadow: 0 0 15px #fff;
+        }
+
+        .choice-btn.danger:hover {
+            color: var(--blood-red);
+            text-shadow: 0 0 15px var(--blood-red);
+        }
+
+        #repair-ui {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .repair-text {
+            font-size: 1rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            width: 300px;
+            height: 4px;
+            background: #111;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+
+        #progress-fill {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: #500;
+            box-shadow: 0 0 10px #500;
+            transition: width 1s linear;
+        }
+
+        .timer-text {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            opacity: 0.6;
         }
 
         .canvas-wrapper {
@@ -92,6 +166,7 @@
             justify-content: center;
             align-items: center;
             animation: slow-rotate 30s linear infinite;
+            z-index: 5;
         }
 
         .ring {
@@ -114,6 +189,30 @@
         .ring:nth-child(3) { width: 800px; height: 800px; animation-delay: -3s; border-width: 35px; opacity: 0.3; }
         .ring:nth-child(4) { width: 1200px; height: 1200px; animation-delay: -4.5s; border-width: 50px; opacity: 0.1; }
 
+        .whisper {
+            position: absolute;
+            color: rgba(200, 0, 0, 0.4);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 2001; 
+            white-space: nowrap;
+            transition: opacity 0.5s ease;
+            text-shadow: 0 0 5px var(--purple-glow);
+            letter-spacing: 1px;
+        }
+
+        .whisper::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            color: var(--purple-glow);
+            opacity: 0.5;
+            z-index: -1;
+            animation: whisper-glitch 0.3s infinite;
+        }
+
         #haunting-text {
             color: var(--blood-red);
             font-weight: 900;
@@ -126,14 +225,6 @@
             pointer-events: none;
             position: absolute;
             transition: color 1.5s ease, text-shadow 1.5s ease, transform 0.1s ease;
-        }
-
-        body.love-mode #haunting-text {
-            color: #ccac00 !important;
-            text-shadow: 0 0 25px var(--gold-glow), 0 0 5px #000 !important;
-            font-size: clamp(1.5rem, 6vw, 3rem);
-            text-transform: none;
-            font-style: italic;
         }
 
         .glitch-active {
@@ -168,6 +259,21 @@
             100% { transform: translate(0) scale(var(--text-scale, 1)); }
         }
 
+        @keyframes whisper-jitter {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(1px, -1px); }
+            40% { transform: translate(-1px, 1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(-1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes whisper-glitch {
+            0% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 0); }
+            50% { clip-path: inset(10% 0 60% 0); transform: translate(2px, 0); }
+            100% { clip-path: inset(30% 0 40% 0); transform: translate(0, 0); }
+        }
+
         @keyframes hypnotic-pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -181,8 +287,20 @@
 </head>
 <body class="hate-mode">
 
+    <div id="repair-ui">
+        <div class="repair-text">[Repairing A Broken Generator]</div>
+        <div class="progress-bar-container">
+            <div id="progress-fill"></div>
+        </div>
+        <div class="timer-text" id="repair-timer">00:30:00:00 REMAINING</div>
+    </div>
+
     <div id="overlay">
         <div class="ritual-btn" id="start-btn">[Enter Sage's Mind.]</div>
+        <div class="choice-container" id="choice-box">
+            <div class="choice-btn" id="yes-btn">[Yes]</div>
+            <div class="choice-btn danger" id="no-btn">[No]</div>
+        </div>
     </div>
 
     <div class="canvas-wrapper" id="master-wrap">
@@ -192,7 +310,7 @@
         </div>
         <div id="haunting-text"></div>
         <div class="energy-container">
-            <svg width="220" height="220" viewBox="0 0 220 220">
+            <svg width="220" height="220" viewBox="0 0 220 220" style="z-index: 100; position: relative;">
                 <circle id="energy-ball" cx="110" cy="110" r="12" />
             </svg>
         </div>
@@ -204,38 +322,29 @@
         const textElement = document.getElementById('haunting-text');
         const masterWrap = document.getElementById('master-wrap');
         const startBtn = document.getElementById('start-btn');
+        const choiceBox = document.getElementById('choice-box');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
         const overlay = document.getElementById('overlay');
+        const repairUi = document.getElementById('repair-ui');
+        const progressFill = document.getElementById('progress-fill');
+        const repairTimer = document.getElementById('repair-timer');
         const shatterContainer = document.getElementById('shatters');
         
-        const hatePhrases = [
-            "You Lost Him", "You Ruined Everything", "This Is Your Fault", "He Doesn't Love You Anymore", "Accept Your Fate",
-            "He's Moved On", "He's Happier Without You", "You Know He's With Someone Else", "You Hurt Him", "You Did This",
-            "You're Pathetic", "He'd Never Love You", "He Can't Hear Your Plea For Help", "Just Stop Breathing Already",
-            "You'll Die Without Him By Your Side", "Another Failure", "Your Love Is a Toxin No One Wants", "You're Just An Empty Hole",
-            "This Is All Your Fault.", "Why Would He Love Someone Like You.", "Grab The Gun And Pull The Trigger.", "You're Better off Dead",
-            "I'll Never Let You Move on.", "Useless.", "Just Keep Making Him Hate You.", "He Doesn't Care About How You Feel.",
-        ];
-
-        const lovePhrases = [
-            "Forgive Yourself.. Please", "I Still Remember You", "Listen To Me..", "We Can Do This Together..",
-            "I Could Never Hate You..", "You'll Always Be Mine..", "I Forgive You..", "I Love You more..",
-            "I'm Still Here Aren't I Babes..", "I'll Never Leave Your Side..", "Forever And Always..", "i Do Love You Babes I Just.."
-        ];
+        const hatePhrases = ["You Lost Him", "You Ruined Everything", "This Is Your Fault", "He Doesn't Love You Anymore", "Accept Your Fate", "He's Moved On", "He's Happier Without You", "You know he's with someone else", "You hurt him", "You did this", "You're pathetic", "He'd never love you", "He can't hear your plea for help", "Just stop breathing already", "You'll die without him by your side", "Another failure", "Your love is a toxin no one wants", "You're just an empty hole", "This is all your fault.", "Why would he love someone like you.", "Grab the gun and pull the trigger.", "You're better off dead", "I'll never let you move on.", "Useless.", "Just keep making him hate you.", "He doesn't care about how you feel.", "Every promise was a lie.", "A ghost in your own life.", "Forgotten before you even left.", "You're a masterpiece of mistakes.", "Look at what you've done.", "You’re not even a memory anymore.", "Waste of space.", "He was always too good for you.", "You chose this.", "Keep crying, it won't change anything.", "You’re the only one still holding on.", "It was always a matter of time.", "You’re a burden, not a blessing.", "He doesn't miss you.", "You destroy everything you touch.", "Keep replaying the failure.", "Look at how pathetic you are.", "You failed him.", "He replaced you effortlessly.", "You’re just a mistake he fixed.", "He found the version of you he actually wanted.", "You’re irrelevant now.", "You’re not a person, you’re a warning label.", "You're a living red flag", "You’re just dead weight.", "He’s already forgotten why he liked you.", "You’re just empty air.", "You’re just a tool he doesn't need."];
+        const lovePhrases = ["Forgive Yourself.. Please", "I Still Remember You", "Listen To Me..", "We Can Do This Together..", "I Could Never Hate You..", "You'll Always Be Mine..", "I Forgive You..", "I Love You more..", "I'm Still Here Aren't I Babes..", "I'll Leave Your Side..", "Forever And Always..", "I Do Love You Babes I Just..", "I'll Come Back.. I Promise.", "I’m Not Done Loving You Yet..", "We Were Supposed To Be Forever..", "I Can’t Let You Go Like This..", "I Still See You When I Close My Eyes..", "I’m The Only One Who Truly Knows You..", "Don’t Pull Away.. Please.", "You’re The Only Thing That Makes Sense..", "I Haven't Given Up On Us..", "You Belong With Me.. You Know You Do.", "I’ll Wait For You.. However Long It Takes."];
+        
+        const ritualWhispers = ["MAKE IT STOP!"];
+        const repairWhispers = ["Help me", "Get Me Out of Here"];
 
         let t = 0, figure8T = 0, ritualStep = 0;
-        let experienceStarted = false;
-        let activationPhrasePlayed = false;
-        let isLoveMode = false;
-        let instability = 1;
-        
-        let spasticIntensity = 0;
-        let teleportX = 0, teleportY = 0;
-        let isBursting = false;
-        let currentBurstEnd = 0;
-
+        let experienceStarted = false, activationPhrasePlayed = false, isLoveMode = false, instability = 1;
+        let teleportX = 0, teleportY = 0, isBursting = false, currentBurstEnd = 0;
         let cachedAudio = null, cachedPhrase = "", activationAudio = null, isCaching = false;
-        let lastPhrase = "";
-        let repeatCount = 0;
+        let lastPhrase = "", repeatCount = 0;
+        let isRepairing = false;
+
+        const TOTAL_REPAIR_TIME = 30 * 60 * 1000; 
 
         async function fetchAudio(text, voice, promptStyle = "") {
             const finalPrompt = promptStyle ? `${promptStyle}: ${text}` : text;
@@ -247,11 +356,7 @@
                         contents: [{ parts: [{ text: finalPrompt }] }],
                         generationConfig: {
                             responseModalities: ["AUDIO"],
-                            speechConfig: {
-                                voiceConfig: {
-                                    prebuiltVoiceConfig: { voiceName: voice } 
-                                }
-                            }
+                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } }
                         }
                     })
                 });
@@ -278,6 +383,41 @@
             const audio = await fetchAudio(phrase, "Fenrir", "Say coldly and dismissively");
             if (audio) { cachedAudio = audio; cachedPhrase = phrase; }
             isCaching = false;
+        }
+
+        function createVisualWhisper(textList, zIndex = 2001, isSpastic = false) {
+            const whisper = document.createElement('div');
+            whisper.className = 'whisper';
+            const selectedText = textList[Math.floor(Math.random() * textList.length)];
+            whisper.textContent = selectedText;
+            whisper.setAttribute('data-text', selectedText);
+            
+            whisper.style.zIndex = zIndex;
+            const x = Math.random() * 80 + 10; 
+            const y = Math.random() * 80 + 10;
+            whisper.style.left = `${x}vw`; 
+            whisper.style.top = `${y}vh`;
+            
+            if (isSpastic) {
+                // Spastic variation: random rotation and much faster jitter
+                const rot = (Math.random() - 0.5) * 40;
+                whisper.style.transform = `rotate(${rot}deg)`;
+                whisper.style.animation = `whisper-jitter ${0.05 + Math.random() * 0.1}s infinite`;
+                whisper.style.fontSize = `${0.6 + Math.random() * 0.4}rem`;
+            } else {
+                whisper.style.animation = `whisper-jitter ${0.1 + Math.random() * 0.2}s infinite`;
+            }
+            
+            whisper.style.opacity = '0';
+            document.body.appendChild(whisper);
+            
+            setTimeout(() => whisper.style.opacity = (Math.random() * 0.5 + 0.2).toString(), 10);
+            
+            const lifetime = isSpastic ? (300 + Math.random() * 800) : (500 + Math.random() * 2000);
+            setTimeout(() => { 
+                whisper.style.opacity = '0'; 
+                setTimeout(() => whisper.remove(), 500); 
+            }, lifetime);
         }
 
         function applyDistortionUI(phrase) {
@@ -325,20 +465,13 @@
 
         function triggerLoveMode() {
             if (isLoveMode) return;
-            isLoveMode = true;
-            isBursting = false;
+            isLoveMode = true; isBursting = false;
             createShatterEffect();
-            document.body.classList.add('love-mode');
-            document.body.classList.remove('hate-mode');
-            ball.style.opacity = '0';
-            cachedAudio = null; cachedPhrase = "";
+            document.body.classList.add('love-mode'); document.body.classList.remove('hate-mode');
+            ball.style.opacity = '0'; cachedAudio = null; cachedPhrase = "";
             setTimeout(() => {
-                isLoveMode = false;
-                document.body.classList.remove('love-mode');
-                document.body.classList.add('hate-mode');
-                ball.style.opacity = '1';
-                instability = 1;
-                preCacheAudio();
+                isLoveMode = false; document.body.classList.remove('love-mode'); document.body.classList.add('hate-mode');
+                ball.style.opacity = '1'; instability = 1; preCacheAudio();
             }, 30000);
         }
 
@@ -346,13 +479,8 @@
             const now = Date.now();
             t += 0.05; figure8T += 0.045;
             const midX = 110, midY = 110;
-
-            if (!isBursting && !isLoveMode && Math.random() < 0.002) {
-                isBursting = true;
-                currentBurstEnd = now + (500 + Math.random() * 2000);
-            }
+            if (!isBursting && !isLoveMode && Math.random() < 0.002) { isBursting = true; currentBurstEnd = now + (500 + Math.random() * 2000); }
             if (isBursting && now > currentBurstEnd) isBursting = false;
-
             let sx = 0, sy = 0;
             if (!isLoveMode) {
                 if (Math.random() < (isBursting ? 0.3 : 0.02)) {
@@ -361,28 +489,21 @@
                 }
                 sx = (Math.random() - 0.5) * (instability * 2 + (isBursting ? 20 : 0));
                 sy = (Math.random() - 0.5) * (instability * 2 + (isBursting ? 20 : 0));
+                
+                // RESTORED SPASTIC BEHAVIOR: Higher frequency for "MAKE IT STOP!"
+                if (Math.random() < 0.035) createVisualWhisper(ritualWhispers, 140, true);
             }
-
             const x = midX + Math.sin(figure8T) * 45 + sx + teleportX;
             const y = midY + (Math.sin(2 * figure8T) / 2) * 35 + sy + teleportY;
             teleportX *= 0.8; teleportY *= 0.8;
-
             ball.setAttribute('cx', x); ball.setAttribute('cy', y);
             ball.setAttribute('r', (10 + Math.sin(t * 2) * 2) * (isLoveMode ? 0.5 : 1));
-            
             if (!isLoveMode) instability += 0.0015;
-
             requestAnimationFrame(animateEnergy);
         }
 
-        // The 1 in 3500 trigger (evaluated every second)
         function checkLoveTrigger() {
-            if (!isLoveMode && experienceStarted && activationPhrasePlayed) {
-                // 1 in 3500 chance
-                if (Math.floor(Math.random() * 3500) === 0) {
-                    triggerLoveMode();
-                }
-            }
+            if (!isLoveMode && experienceStarted && activationPhrasePlayed && Math.floor(Math.random() * 3500) === 0) triggerLoveMode();
         }
 
         function triggerSequence() {
@@ -397,11 +518,7 @@
                     textElement.textContent = "Sage Obey";
                     textElement.classList.add('glitch-active');
                     activationPhrasePlayed = true;
-                    setTimeout(() => {
-                        textElement.classList.remove('glitch-active');
-                        flash.remove();
-                        setTimeout(triggerSequence, 2000);
-                    }, 4000);
+                    setTimeout(() => { textElement.classList.remove('glitch-active'); flash.remove(); setTimeout(triggerSequence, 2000); }, 4000);
                 } else { setTimeout(triggerSequence, 100); }
                 return;
             }
@@ -409,50 +526,96 @@
                 const phrase = lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
                 applyDistortionUI(phrase);
                 textElement.classList.add('glitch-active');
-                setTimeout(() => {
-                    textElement.classList.remove('glitch-active');
-                    setTimeout(triggerSequence, 2000 + Math.random() * 2000);
-                }, 3500);
+                setTimeout(() => { textElement.classList.remove('glitch-active'); setTimeout(triggerSequence, 2000 + Math.random() * 2000); }, 3500);
                 return;
             }
             if (cachedAudio && cachedPhrase) {
-                cachedAudio.play();
-                applyDistortionUI(cachedPhrase);
+                cachedAudio.play(); applyDistortionUI(cachedPhrase);
                 textElement.classList.add('glitch-active');
-                cachedAudio = null; cachedPhrase = "";
-                preCacheAudio(); 
-                setTimeout(() => {
-                    textElement.classList.remove('glitch-active');
-                    setTimeout(triggerSequence, 1500 + Math.random() * 2000);
-                }, 3000);
-            } else {
-                preCacheAudio().then(() => setTimeout(triggerSequence, 200));
-            }
+                cachedAudio = null; cachedPhrase = ""; preCacheAudio(); 
+                setTimeout(() => { textElement.classList.remove('glitch-active'); setTimeout(triggerSequence, 1500 + Math.random() * 2000); }, 3000);
+            } else { preCacheAudio().then(() => setTimeout(triggerSequence, 200)); }
+        }
+
+        function startRepair() {
+            isRepairing = true;
+            repairUi.style.display = 'flex';
+            const startTime = Date.now();
+            
+            const whisperInterval = setInterval(() => {
+                if (isRepairing && Math.random() < 0.4) createVisualWhisper(repairWhispers, 2001, false);
+            }, 1000);
+            
+            const updateRepair = () => {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, TOTAL_REPAIR_TIME - elapsed);
+                const progress = (elapsed / TOTAL_REPAIR_TIME) * 100;
+                
+                progressFill.style.width = `${progress}%`;
+                
+                const mins = Math.floor(remaining / 60000);
+                const secs = Math.floor((remaining % 60000) / 1000);
+                const ms = Math.floor((remaining % 1000) / 10);
+                
+                repairTimer.textContent = `00:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}:${ms.toString().padStart(2,'0')} REMAINING`;
+                
+                if (remaining > 0) {
+                    requestAnimationFrame(updateRepair);
+                } else {
+                    isRepairing = false;
+                    clearInterval(whisperInterval);
+                    resetRitual();
+                }
+            };
+            
+            requestAnimationFrame(updateRepair);
+        }
+
+        function resetRitual() {
+            repairUi.style.display = 'none';
+            ritualStep = 0;
+            startBtn.textContent = "[Enter Sage's Mind.]";
+            startBtn.style.pointerEvents = "auto";
+            startBtn.style.color = "#500";
+            choiceBox.style.opacity = "0";
+            choiceBox.style.transform = "translateY(20px)";
+            overlay.style.opacity = "1";
+            overlay.style.display = "flex";
         }
 
         startBtn.addEventListener('click', () => {
-            ritualStep++;
-            if (ritualStep === 1) {
+            if (ritualStep === 0) {
+                ritualStep = 1;
                 startBtn.textContent = "[Are You Sure?]";
-                preCacheActivation();
-                preCacheAudio(); 
-            } else if (ritualStep === 2) {
-                startBtn.textContent = "[Very well..]";
                 startBtn.style.pointerEvents = "none";
-                startBtn.style.opacity = "0.5";
-                setTimeout(() => {
-                    overlay.style.opacity = "0";
-                    masterWrap.style.opacity = "1";
-                    setTimeout(() => {
-                        overlay.style.display = "none";
-                        experienceStarted = true;
-                        animateEnergy();
-                        triggerSequence();
-                        // Start the rare trigger interval
-                        setInterval(checkLoveTrigger, 1000);
-                    }, 4000);
-                }, 1500);
+                choiceBox.style.opacity = "1";
+                choiceBox.style.transform = "translateY(0)";
+                preCacheActivation(); preCacheAudio(); 
             }
+        });
+
+        yesBtn.addEventListener('click', () => {
+            choiceBox.style.opacity = "0";
+            startBtn.textContent = "[Very well..]";
+            setTimeout(() => {
+                overlay.style.opacity = "0";
+                masterWrap.style.opacity = "1";
+                setTimeout(() => {
+                    overlay.style.display = "none";
+                    experienceStarted = true; animateEnergy(); triggerSequence();
+                    setInterval(checkLoveTrigger, 1000);
+                }, 4000);
+            }, 1500);
+        });
+
+        noBtn.addEventListener('click', () => {
+            choiceBox.style.opacity = "0";
+            startBtn.style.color = "var(--blood-red)";
+            startBtn.textContent = "TERMINATING SESSION...";
+            setTimeout(() => {
+                overlay.style.display = "none";
+                startRepair();
+            }, 2000);
         });
     </script>
 </body>
