@@ -1,9 +1,10 @@
+<!-- This is your "ritual.html" code, renamed to index.html for GitHub Pages -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sage's Mind</title>
+    <title>Sage's Mind Ritual</title>
     <style>
         :root {
             --bg-color: #000000;
@@ -317,7 +318,7 @@
     </div>
 
     <script>
-        const apiKey = "";
+        const apiKey = ""; // Insert your key here for GitHub deployment
         const ball = document.getElementById('energy-ball');
         const textElement = document.getElementById('haunting-text');
         const masterWrap = document.getElementById('master-wrap');
@@ -399,7 +400,6 @@
             whisper.style.top = `${y}vh`;
             
             if (isSpastic) {
-                // Spastic variation: random rotation and much faster jitter
                 const rot = (Math.random() - 0.5) * 40;
                 whisper.style.transform = `rotate(${rot}deg)`;
                 whisper.style.animation = `whisper-jitter ${0.05 + Math.random() * 0.1}s infinite`;
@@ -490,7 +490,6 @@
                 sx = (Math.random() - 0.5) * (instability * 2 + (isBursting ? 20 : 0));
                 sy = (Math.random() - 0.5) * (instability * 2 + (isBursting ? 20 : 0));
                 
-                // RESTORED SPASTIC BEHAVIOR: Higher frequency for "MAKE IT STOP!"
                 if (Math.random() < 0.035) createVisualWhisper(ritualWhispers, 140, true);
             }
             const x = midX + Math.sin(figure8T) * 45 + sx + teleportX;
