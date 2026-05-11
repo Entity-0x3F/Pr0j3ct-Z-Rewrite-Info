@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hypnotic Red & Gold Pulse</title>
+    <title>Sage's Mind</title>
     <style>
         :root {
             --bg-color: #000000;
@@ -12,7 +12,6 @@
             --blood-red: #ff0000; 
             --gold-color: #ffd700;
             --gold-glow: #ffae00;
-            --gold-dark: #b8860b;
             --transition-speed: 2s;
         }
 
@@ -30,20 +29,45 @@
             transition: background-color var(--transition-speed) ease;
         }
 
-        /* Scanline Overlay */
         body::after {
             content: " ";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
                         linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
             background-size: 100% 4px, 3px 100%;
             z-index: 500;
             pointer-events: none;
             opacity: 0.3;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: opacity 3s ease;
+        }
+
+        .ritual-btn {
+            color: #500;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            padding: 20px;
+            border: 1px solid transparent;
+            transition: all 0.5s ease;
+            text-align: center;
+        }
+
+        .ritual-btn:hover {
+            color: var(--blood-red);
+            text-shadow: 0 0 10px var(--blood-red);
         }
 
         .canvas-wrapper {
@@ -54,7 +78,8 @@
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle at center, #300 0%, #000 80%);
-            transition: background var(--transition-speed) ease;
+            opacity: 0;
+            transition: opacity 5s ease, background var(--transition-speed) ease;
         }
 
         body.love-mode .canvas-wrapper {
@@ -78,110 +103,69 @@
             transition: border-color 0.1s ease, box-shadow 0.1s ease, opacity 0.8s ease;
         }
 
-        /* Flash State for Impact */
-        .ring.flash-gold {
-            border-color: var(--gold-color) !important;
-            box-shadow: 0 0 60px var(--gold-glow), inset 0 0 20px var(--gold-glow) !important;
-            transition: border-color 0.05s ease, box-shadow 0.05s ease;
-        }
-
-        .shiver {
-            animation: ring-shiver 0.1s infinite !important;
-            border-color: var(--gold-glow) !important;
-            box-shadow: 0 0 50px var(--gold-glow) !important;
-        }
-
         body.love-mode .ring {
             border-color: var(--gold-color) !important;
             box-shadow: 0 0 100px var(--gold-glow) !important;
             filter: brightness(1.5);
-            animation: hypnotic-pulse 6s ease-in-out infinite !important; 
         }
 
-        .ring:nth-child(1) { width: 220px; height: 220px; animation-delay: 0s; border-width: 10px; z-index: 10; }
+        .ring:nth-child(1) { width: 220px; height: 220px; border-width: 10px; z-index: 10; }
         .ring:nth-child(2) { width: 480px; height: 480px; animation-delay: -1.5s; border-width: 20px; opacity: 0.6; }
         .ring:nth-child(3) { width: 800px; height: 800px; animation-delay: -3s; border-width: 35px; opacity: 0.3; }
         .ring:nth-child(4) { width: 1200px; height: 1200px; animation-delay: -4.5s; border-width: 50px; opacity: 0.1; }
-
-        .energy-container {
-            position: absolute;
-            z-index: 100;
-            width: 220px;
-            height: 220px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        #energy-ball {
-            fill: var(--gold-color);
-            filter: drop-shadow(0 0 20px var(--gold-glow));
-            transition: fill 1s ease, opacity 0.5s ease;
-        }
-
-        #shatters {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 150;
-        }
-
-        #haunting-text-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-            pointer-events: none;
-        }
 
         #haunting-text {
             color: var(--blood-red);
             font-weight: 900;
             text-transform: uppercase;
             text-align: center;
-            padding: 20px;
-            letter-spacing: 1px;
             opacity: 0;
             font-size: clamp(1.8rem, 8vw, 4.5rem);
-            max-width: 90vw;
-            text-shadow: 0 0 15px rgba(255, 0, 0, 0.9), 0 0 5px rgba(0, 0, 0, 1);
-            transition: color 1.5s ease, text-shadow 1.5s ease;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+            z-index: 200;
+            pointer-events: none;
+            position: absolute;
+            transition: color 1.5s ease, text-shadow 1.5s ease, transform 0.1s ease;
         }
 
         body.love-mode #haunting-text {
             color: #ccac00 !important;
-            text-shadow: 
-                0 0 5px #000,
-                0 0 10px #000,
-                0 0 25px var(--gold-glow),
-                0 0 50px rgba(255, 215, 0, 0.3) !important;
+            text-shadow: 0 0 25px var(--gold-glow), 0 0 5px #000 !important;
+            font-size: clamp(1.5rem, 6vw, 3rem);
+            text-transform: none;
+            font-style: italic;
         }
 
         .glitch-active {
             opacity: 1 !important;
-            animation: tiktok-shake 0.12s infinite;
+            animation: shake var(--shake-intensity, 0.12s) infinite;
         }
 
-        @keyframes ring-shiver {
-            0% { transform: translate(0) scale(1); }
-            25% { transform: translate(-6px, 6px) scale(1.02); }
-            50% { transform: translate(6px, -6px) scale(0.98); }
-            75% { transform: translate(-6px, -6px) scale(1.02); }
-            100% { transform: translate(0) scale(1); }
+        .activation-flash {
+            animation: flash-red 0.5s ease forwards;
         }
 
-        @keyframes tiktok-shake {
-            0% { transform: translate(0); }
-            25% { transform: translate(-3px, 2px); }
-            50% { transform: translate(3px, -2px); }
-            100% { transform: translate(0); }
+        @keyframes flash-red {
+            0% { background: white; }
+            50% { background: var(--blood-red); }
+            100% { background: transparent; }
+        }
+
+        #energy-ball { fill: var(--gold-color); filter: drop-shadow(0 0 20px var(--gold-glow)); transition: opacity 0.5s ease; }
+        
+        #shatters {
+            position: absolute;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 150;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0) scale(var(--text-scale, 1)); }
+            25% { transform: translate(calc(var(--distort-factor, 1) * -3px), calc(var(--distort-factor, 1) * 2px)) scale(var(--text-scale, 1)); }
+            50% { transform: translate(calc(var(--distort-factor, 1) * 3px), calc(var(--distort-factor, 1) * -2px)) scale(var(--text-scale, 1)); }
+            75% { transform: translate(calc(var(--distort-factor, 1) * 2px), calc(var(--distort-factor, 1) * 3px)) scale(var(--text-scale, 1)); }
+            100% { transform: translate(0) scale(var(--text-scale, 1)); }
         }
 
         @keyframes hypnotic-pulse {
@@ -197,20 +181,17 @@
 </head>
 <body class="hate-mode">
 
+    <div id="overlay">
+        <div class="ritual-btn" id="start-btn">[Enter Sage's Mind.]</div>
+    </div>
+
     <div class="canvas-wrapper" id="master-wrap">
         <div id="shatters"></div>
-        <div class="ring-container" id="ring-box">
-            <div class="ring" id="inner-ring"></div>
-            <div class="ring"></div>
-            <div class="ring"></div>
-            <div class="ring"></div>
+        <div class="ring-container">
+            <div class="ring" id="inner-ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
         </div>
-        
-        <div id="haunting-text-container">
-            <div id="haunting-text" data-text=""></div>
-        </div>
-
-        <div class="energy-container" id="energy-wrap">
+        <div id="haunting-text"></div>
+        <div class="energy-container">
             <svg width="220" height="220" viewBox="0 0 220 220">
                 <circle id="energy-ball" cx="110" cy="110" r="12" />
             </svg>
@@ -218,261 +199,261 @@
     </div>
 
     <script>
+        const apiKey = "";
         const ball = document.getElementById('energy-ball');
         const textElement = document.getElementById('haunting-text');
-        const energyWrap = document.getElementById('energy-wrap');
         const masterWrap = document.getElementById('master-wrap');
-        const innerRing = document.getElementById('inner-ring');
+        const startBtn = document.getElementById('start-btn');
+        const overlay = document.getElementById('overlay');
         const shatterContainer = document.getElementById('shatters');
-        const allRings = document.querySelectorAll('.ring');
         
         const hatePhrases = [
             "You Lost Him", "You Ruined Everything", "This Is Your Fault", "He Doesn't Love You Anymore", "Accept Your Fate",
             "He's Moved On", "He's Happier Without You", "You Know He's With Someone Else", "You Hurt Him", "You Did This",
             "You're Pathetic", "He'd Never Love You", "He Can't Hear Your Plea For Help", "Just Stop Breathing Already",
-            "You'll Die Without Him By Your Side", "Another Failure", "Your Love Is a Toxin No One Wants",
+            "You'll Die Without Him By Your Side", "Another Failure", "Your Love Is a Toxin No One Wants", "You're Just An Empty Hole",
+            "This Is All Your Fault.", "Why Would He Love Someone Like You.", "Grab The Gun And Pull The Trigger.", "You're Better off Dead",
+            "I'll Never Let You Move on.", "Useless.", "Just Keep Making Him Hate You.", "He Doesn't Care About How You Feel.",
         ];
 
         const lovePhrases = [
             "Forgive Yourself.. Please", "I Still Remember You", "Listen To Me..", "We Can Do This Together..",
             "I Could Never Hate You..", "You'll Always Be Mine..", "I Forgive You..", "I Love You more..",
-            "I'm Still Here Aren't I Babes..", "I'll Never Leave Your Side..", "Forever And Always..",
+            "I'm Still Here Aren't I Babes..", "I'll Never Leave Your Side..", "Forever And Always..", "i Do Love You Babes I Just.."
         ];
 
-        let t = 0;
-        let figure8T = 0;
-        let instability = 1; 
+        let t = 0, figure8T = 0, ritualStep = 0;
+        let experienceStarted = false;
+        let activationPhrasePlayed = false;
         let isLoveMode = false;
-        let isVanishing = false;
-        let risingAggression = false;
-        let aggressionStartTime = 0;
-        let loveModeStartTime = 0;
-        let loveModeTargetDuration = 0;
-        let textTimer = null;
+        let instability = 1;
         
-        let isImpacting = false;
-        let impactT = 0;
-        let targetX = 110;
-        let targetY = 110;
+        let spasticIntensity = 0;
+        let teleportX = 0, teleportY = 0;
+        let isBursting = false;
+        let currentBurstEnd = 0;
+
+        let cachedAudio = null, cachedPhrase = "", activationAudio = null, isCaching = false;
+        let lastPhrase = "";
+        let repeatCount = 0;
+
+        async function fetchAudio(text, voice, promptStyle = "") {
+            const finalPrompt = promptStyle ? `${promptStyle}: ${text}` : text;
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: finalPrompt }] }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: {
+                                    prebuiltVoiceConfig: { voiceName: voice } 
+                                }
+                            }
+                        }
+                    })
+                });
+                const result = await response.json();
+                const audioData = result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                if (audioData) {
+                    const audioBlob = pcmToWav(audioData, 24000);
+                    const audioObj = new Audio(URL.createObjectURL(audioBlob));
+                    audioObj.load();
+                    return audioObj;
+                }
+            } catch (e) { console.error(e); }
+            return null;
+        }
+
+        async function preCacheActivation() {
+            activationAudio = await fetchAudio("Sage. Obey.", "Fenrir", "Speak with cold, military authority. No drawn out words. Precise and sharp.");
+        }
+
+        async function preCacheAudio() {
+            if (isCaching || isLoveMode) return;
+            isCaching = true;
+            const phrase = hatePhrases[Math.floor(Math.random() * hatePhrases.length)];
+            const audio = await fetchAudio(phrase, "Fenrir", "Say coldly and dismissively");
+            if (audio) { cachedAudio = audio; cachedPhrase = phrase; }
+            isCaching = false;
+        }
+
+        function applyDistortionUI(phrase) {
+            if (isLoveMode) {
+                textElement.style.setProperty('--distort-factor', 0);
+                textElement.style.setProperty('--shake-intensity', '0s');
+                textElement.style.setProperty('--text-scale', 1);
+                textElement.textContent = phrase;
+                return;
+            }
+            if (phrase === lastPhrase) repeatCount++; else repeatCount = 0;
+            lastPhrase = phrase;
+            const factor = 1 + (repeatCount * 1.5);
+            textElement.style.setProperty('--distort-factor', factor);
+            textElement.textContent = phrase;
+        }
+
+        function pcmToWav(b64, rate) {
+            const s = atob(b64);
+            const b = new ArrayBuffer(44 + s.length);
+            const v = new DataView(b);
+            const w = (o, str) => { for (let i=0; i<str.length; i++) v.setUint8(o+i, str.charCodeAt(i)); };
+            w(0, 'RIFF'); v.setUint32(4, 36 + s.length, true); w(8, 'WAVE'); w(12, 'fmt ');
+            v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+            v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true);
+            v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data');
+            v.setUint32(40, s.length, true);
+            for (let i=0; i<s.length; i++) v.setUint8(44+i, s.charCodeAt(i));
+            return new Blob([b], { type: 'audio/wav' });
+        }
 
         function createShatterEffect() {
             shatterContainer.innerHTML = '';
             for(let i=0; i<60; i++) {
                 const shard = document.createElement('div');
-                shard.style.position = 'absolute';
-                shard.style.width = Math.random() * 60 + 30 + 'px';
-                shard.style.height = '6px';
-                shard.style.background = 'var(--gold-color)';
-                shard.style.boxShadow = '0 0 25px var(--gold-glow)';
-                shard.style.left = '50%';
-                shard.style.top = '50%';
-                shard.style.borderRadius = '2px';
-                
-                const angle = Math.random() * Math.PI * 2;
-                const dist = 600 + Math.random() * 800;
-                const tx = Math.cos(angle) * dist;
-                const ty = Math.sin(angle) * dist;
-                const rot = Math.random() * 1080;
-
+                shard.style.cssText = `position:absolute;width:${Math.random()*60+30}px;height:6px;background:var(--gold-color);box-shadow:0 0 25px var(--gold-glow);left:50%;top:50%;border-radius:2px;`;
+                const angle = Math.random() * Math.PI * 2, dist = 600 + Math.random() * 800;
                 shard.animate([
                     { transform: 'translate(-50%, -50%) rotate(0deg) scale(1)', opacity: 1 },
-                    { transform: `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(0)`, opacity: 0 }
-                ], {
-                    duration: 1800,
-                    easing: 'cubic-bezier(0.1, 0.9, 0.2, 1)',
-                    fill: 'forwards'
-                });
+                    { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) rotate(${Math.random()*1080}deg) scale(0)`, opacity: 0 }
+                ], { duration: 1800, easing: 'cubic-bezier(0.1, 0.9, 0.2, 1)', fill: 'forwards' });
                 shatterContainer.appendChild(shard);
-            }
-        }
-
-        function animateEnergy() {
-            t += 0.05;
-            figure8T += 0.045; 
-
-            const midX = 110;
-            const midY = 110;
-            
-            const idleAmpX = 45;
-            const idleAmpY = 25;
-            const idleX = Math.sin(figure8T) * idleAmpX;
-            const idleY = (Math.sin(2 * figure8T) / 2) * (idleAmpY * 1.5);
-
-            let radius = 10 + Math.sin(t * 2) * 2 + (instability * 0.8);
-            let currentX = midX + idleX;
-            let currentY = midY + idleY;
-
-            if (!isLoveMode) {
-                const shakeIntensity = (instability - 1) * 3;
-                const shakeX = (Math.random() - 0.5) * shakeIntensity;
-                const shakeY = (Math.random() - 0.5) * shakeIntensity;
-
-                if (!isImpacting && !isVanishing && Math.random() < 0.01 * instability) {
-                    isImpacting = true;
-                    impactT = 0;
-                    const angle = Math.random() * Math.PI * 2;
-                    targetX = midX + Math.cos(angle) * 102; 
-                    targetY = midY + Math.sin(angle) * 102;
-                }
-
-                if (isImpacting) {
-                    impactT += 0.14 + (instability * 0.03); 
-                    
-                    if (impactT > Math.PI) {
-                        isImpacting = false;
-                        innerRing.classList.remove('shiver');
-                        innerRing.classList.remove('flash-gold');
-                    } else {
-                        const progress = Math.sin(impactT);
-                        currentX = (midX + idleX) * (1 - progress) + targetX * progress;
-                        currentY = (midY + idleY) * (1 - progress) + targetY * progress;
-                        
-                        // Flash gold only during the peak of the contact
-                        if (progress > 0.9) {
-                            innerRing.classList.add('flash-gold');
-                            innerRing.classList.add('shiver');
-                        } else {
-                            innerRing.classList.remove('flash-gold');
-                            innerRing.classList.remove('shiver');
-                        }
-                        radius = radius * (1 + progress * 0.4);
-                    }
-                }
-                currentX += shakeX;
-                currentY += shakeY;
-            } else if (isVanishing) {
-                radius += 15;
-                ball.style.opacity = Math.max(0, parseFloat(ball.style.opacity || 1) - 0.05);
-            }
-            
-            ball.setAttribute('cx', currentX);
-            ball.setAttribute('cy', currentY);
-            ball.setAttribute('r', radius);
-
-            requestAnimationFrame(animateEnergy);
-        }
-
-        function showRandomText() {
-            if (textTimer) clearTimeout(textTimer);
-            
-            const currentPhrases = isLoveMode ? lovePhrases : hatePhrases;
-            const phrase = currentPhrases[Math.floor(Math.random() * currentPhrases.length)];
-            textElement.textContent = phrase;
-            textElement.setAttribute('data-text', phrase);
-            
-            if (!isLoveMode) {
-                textElement.classList.add('glitch-active');
-                textTimer = setTimeout(() => {
-                    textElement.classList.remove('glitch-active');
-                    textTimer = setTimeout(showRandomText, 500 + Math.random() * 1000);
-                }, 3000);
-            } else {
-                textElement.style.opacity = 1;
-                textElement.classList.remove('glitch-active');
-                
-                textTimer = setTimeout(() => {
-                    const loveElapsed = (Date.now() - loveModeStartTime) / 1000;
-                    if (loveElapsed >= loveModeTargetDuration) {
-                        resetToHate();
-                    } else {
-                        textElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 1500, fill: 'forwards' });
-                        textTimer = setTimeout(() => {
-                            textElement.style.opacity = 0;
-                            showRandomText();
-                        }, 2000);
-                    }
-                }, 4000);
-            }
-        }
-
-        function updateCycle() {
-            if (!isLoveMode) {
-                if (!risingAggression) {
-                    if (Math.random() < (1 / 2500)) {
-                        risingAggression = true;
-                        aggressionStartTime = Date.now();
-                    }
-                } else {
-                    const elapsed = (Date.now() - aggressionStartTime) / 1000;
-                    const duration = 300; 
-                    instability = Math.min(8, 1 + (elapsed / duration) * 7);
-                    if (elapsed >= duration) {
-                        triggerLoveMode();
-                    }
-                }
             }
         }
 
         function triggerLoveMode() {
             if (isLoveMode) return;
             isLoveMode = true;
-            isImpacting = false;
-            risingAggression = false;
-            
-            // Set random duration between 20 and 35 seconds
-            loveModeTargetDuration = 20 + Math.random() * 15;
-            loveModeStartTime = Date.now();
-            
-            allRings.forEach(ring => ring.classList.add('shiver'));
-            
+            isBursting = false;
+            createShatterEffect();
+            document.body.classList.add('love-mode');
+            document.body.classList.remove('hate-mode');
+            ball.style.opacity = '0';
+            cachedAudio = null; cachedPhrase = "";
             setTimeout(() => {
-                isVanishing = true;
-                ball.style.opacity = '1';
-                createShatterEffect();
-                
-                document.body.classList.add('love-mode');
-                document.body.classList.remove('hate-mode');
-                
-                allRings.forEach(ring => ring.classList.remove('shiver'));
-                
-                if (textTimer) clearTimeout(textTimer);
-                textElement.classList.remove('glitch-active');
-                textElement.textContent = "Follow My Voice..";
-                textElement.style.opacity = 1;
-                
-                setTimeout(() => {
-                    ball.style.display = 'none';
-                    showRandomText();
-                }, 2000);
-            }, 600);
-        }
-
-        function resetToHate() {
-            masterWrap.animate([
-                { opacity: 1, filter: 'brightness(1)' },
-                { opacity: 0, filter: 'brightness(0)' }
-            ], { duration: 3000, fill: 'forwards' });
-
-            setTimeout(() => {
-                if (textTimer) clearTimeout(textTimer);
-                
                 isLoveMode = false;
-                isVanishing = false;
-                instability = 1;
-                risingAggression = false;
-                
-                ball.style.display = 'block';
-                ball.style.opacity = '1';
-                ball.setAttribute('r', 12);
-                
                 document.body.classList.remove('love-mode');
                 document.body.classList.add('hate-mode');
-                allRings.forEach(ring => ring.classList.remove('shiver'));
-                
-                masterWrap.animate([
-                    { opacity: 0, filter: 'brightness(0)' },
-                    { opacity: 1, filter: 'brightness(1)' }
-                ], { duration: 1500, fill: 'forwards' });
-
-                setTimeout(() => showRandomText(), 1500);
-            }, 3000);
+                ball.style.opacity = '1';
+                instability = 1;
+                preCacheAudio();
+            }, 30000);
         }
 
-        window.onload = () => {
-            animateEnergy();
-            setInterval(updateCycle, 1000); 
-            setTimeout(showRandomText, 1500);
-        };
+        function animateEnergy() {
+            const now = Date.now();
+            t += 0.05; figure8T += 0.045;
+            const midX = 110, midY = 110;
+
+            if (!isBursting && !isLoveMode && Math.random() < 0.002) {
+                isBursting = true;
+                currentBurstEnd = now + (500 + Math.random() * 2000);
+            }
+            if (isBursting && now > currentBurstEnd) isBursting = false;
+
+            let sx = 0, sy = 0;
+            if (!isLoveMode) {
+                if (Math.random() < (isBursting ? 0.3 : 0.02)) {
+                    teleportX = (Math.random() - 0.5) * (isBursting ? 120 : 40);
+                    teleportY = (Math.random() - 0.5) * (isBursting ? 120 : 40);
+                }
+                sx = (Math.random() - 0.5) * (instability * 2 + (isBursting ? 20 : 0));
+                sy = (Math.random() - 0.5) * (instability * 2 + (isBursting ? 20 : 0));
+            }
+
+            const x = midX + Math.sin(figure8T) * 45 + sx + teleportX;
+            const y = midY + (Math.sin(2 * figure8T) / 2) * 35 + sy + teleportY;
+            teleportX *= 0.8; teleportY *= 0.8;
+
+            ball.setAttribute('cx', x); ball.setAttribute('cy', y);
+            ball.setAttribute('r', (10 + Math.sin(t * 2) * 2) * (isLoveMode ? 0.5 : 1));
+            
+            if (!isLoveMode) instability += 0.0015;
+
+            requestAnimationFrame(animateEnergy);
+        }
+
+        // The 1 in 3500 trigger (evaluated every second)
+        function checkLoveTrigger() {
+            if (!isLoveMode && experienceStarted && activationPhrasePlayed) {
+                // 1 in 3500 chance
+                if (Math.floor(Math.random() * 3500) === 0) {
+                    triggerLoveMode();
+                }
+            }
+        }
+
+        function triggerSequence() {
+            if (!experienceStarted) return;
+            if (!activationPhrasePlayed) {
+                if (activationAudio) {
+                    const flash = document.createElement('div');
+                    flash.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;pointer-events:none;";
+                    flash.classList.add('activation-flash');
+                    document.body.appendChild(flash);
+                    activationAudio.play();
+                    textElement.textContent = "Sage Obey";
+                    textElement.classList.add('glitch-active');
+                    activationPhrasePlayed = true;
+                    setTimeout(() => {
+                        textElement.classList.remove('glitch-active');
+                        flash.remove();
+                        setTimeout(triggerSequence, 2000);
+                    }, 4000);
+                } else { setTimeout(triggerSequence, 100); }
+                return;
+            }
+            if (isLoveMode) {
+                const phrase = lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
+                applyDistortionUI(phrase);
+                textElement.classList.add('glitch-active');
+                setTimeout(() => {
+                    textElement.classList.remove('glitch-active');
+                    setTimeout(triggerSequence, 2000 + Math.random() * 2000);
+                }, 3500);
+                return;
+            }
+            if (cachedAudio && cachedPhrase) {
+                cachedAudio.play();
+                applyDistortionUI(cachedPhrase);
+                textElement.classList.add('glitch-active');
+                cachedAudio = null; cachedPhrase = "";
+                preCacheAudio(); 
+                setTimeout(() => {
+                    textElement.classList.remove('glitch-active');
+                    setTimeout(triggerSequence, 1500 + Math.random() * 2000);
+                }, 3000);
+            } else {
+                preCacheAudio().then(() => setTimeout(triggerSequence, 200));
+            }
+        }
+
+        startBtn.addEventListener('click', () => {
+            ritualStep++;
+            if (ritualStep === 1) {
+                startBtn.textContent = "[Are You Sure?]";
+                preCacheActivation();
+                preCacheAudio(); 
+            } else if (ritualStep === 2) {
+                startBtn.textContent = "[Very well..]";
+                startBtn.style.pointerEvents = "none";
+                startBtn.style.opacity = "0.5";
+                setTimeout(() => {
+                    overlay.style.opacity = "0";
+                    masterWrap.style.opacity = "1";
+                    setTimeout(() => {
+                        overlay.style.display = "none";
+                        experienceStarted = true;
+                        animateEnergy();
+                        triggerSequence();
+                        // Start the rare trigger interval
+                        setInterval(checkLoveTrigger, 1000);
+                    }, 4000);
+                }, 1500);
+            }
+        });
     </script>
 </body>
 </html>
